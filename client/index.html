@@ -1,0 +1,170 @@
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Mini MEAN Store</title>
+	<link rel="stylesheet" href="./lib/bootstrap.css">
+	<link rel="stylesheet" href="./lib/bootstraptheme.min.css">
+	<script type="text/javascript" src="./lib/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="./lib/angular.js"></script>
+	<script type="text/javascript" src="./lib/angular-route.js"></script>​
+	<script type="text/javascript">
+
+	var app = angular.module('myApp', ['ngRoute']);
+
+	//PRODUCT FACTORY
+	app.factory('ProductFactory', function($http){
+		var factory = {};
+		factory.getProducts = function(callback) {
+            $http.get('/products').success(function(output_from_server) {
+                orders = output_from_server;
+                callback(orders);
+            }) 
+        }
+        factory.addProduct = function(new_product, callback) {
+            $http.post('/addProduct', new_product).success(function(output_from_server) {
+                products = output_from_server;
+                callback(products);
+            }) 
+        }
+        return factory;
+	})
+	//CUSTOMER FACTORY
+	app.factory('CustomerFactory', function($http){
+		var factory = {};
+		factory.getCustomers = function(callback) {
+            $http.get('/customers').success(function(output_from_server) {
+                customers = output_from_server;
+                callback(customers);
+            }) 
+        }
+        factory.addCustomer = function(new_customer, callback) {
+            $http.post('/addCustomer', new_customer).success(function(output_from_server) {
+                customers = output_from_server;
+                callback(customers);
+            }) 
+        }
+        return factory;
+	})
+	//ORDER FACTORY
+	app.factory('OrderFactory', function($http){
+		var factory = {};
+		factory.getOrders = function(callback) {
+            $http.get('/orders').success(function(output_from_server) {
+                orders = output_from_server;
+                callback(orders);
+            }) 
+        }
+        factory.addOrder = function(new_order, callback) {
+            $http.post('/addOrder', new_order).success(function(output_from_server) {
+                orders = output_from_server;
+                callback(orders);
+            }) 
+        }
+        return factory;
+	})
+
+
+	// PRODUCT CONTROLLER
+	app.controller('ProductController', function(ProductFactory){
+		var _this = this;
+		ProductFactory.getProducts(function(data_from_DB){
+			console.log('products in db:', data_from_DB);
+			_this.products = data_from_DB;
+		})
+		this.addProduct = function(new_product) {
+			console.log('firing in product controller addProduct');
+            ProductFactory.addProduct(new_product, function(products) {
+                //repopulating the screen with new product list
+                ProductFactory.getProducts(function(data_from_DB) {
+                    _this.products = data_from_DB;
+                });
+            });
+            this.new_product = {};
+        };
+	})
+	//CUSTOMER CONTROLLER
+	app.controller('CustomerController', function(CustomerFactory){
+		var _this = this;
+		CustomerFactory.getCustomers(function(data_from_DB){
+			console.log('customers in db', data_from_DB);
+			_this.customers = data_from_DB;
+		})
+		this.addCustomer = function(new_customer) {
+            CustomerFactory.addCustomer(new_customer, function(customers) {
+                //repopulating the screen with new customer list
+                CustomerFactory.getCustomers(function(data_from_DB) {
+                    _this.customers = data_from_DB;
+                });
+            });
+            this.new_customer = {};
+        };
+	})
+	//ORDER CONTROLLER
+	app.controller('OrderController', function(OrderFactory){
+		var _this = this;
+		OrderFactory.getOrders(function(data_from_DB){
+			console.log("order data from db", data_from_DB);
+			_this.orders = data_from_DB;
+		})
+		this.addOrder = function(new_order) {
+            OrderFactory.addOrder(new_order, function(orders) {
+            	console.log('firing on add order in facotry', new_order);
+                //repopulating the screen with new order list
+                OrderFactory.getOrders(function(data_from_DB) {
+                    _this.orders = data_from_DB;
+                });
+            });
+            this.new_order = {};
+        };
+	})
+
+	</script>
+
+
+	<style type="text/css">
+	*{
+		/*outline: blue dotted 1px;*/
+	}
+	.searchBar{
+		margin-bottom: 10px;
+	}
+
+	.shoeRow{
+		margin-left: 50px;
+	}
+	
+	nav{
+		margin-top: -20px;
+	}
+
+	</style>
+
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<!-- logo brand -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#/" class="navbar-brand">Responsive MEAN Store</a>
+			</div>
+			<!-- menu items -->
+			<div class="collapse navbar-collapse" id="mainNavBar">
+				<ul class="nav navbar-nav">
+					<li><a href="#/">Dashboard</a></li>
+					<li><a href="#/products">Products</a></li>
+					<li><a href="#/orders">Orders</a></li>
+					<li><a href="#/customers">Customers</a></li>
+					<li><a href="#/settings">Settings</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div ng-view></div>
+	<script src="../config/partial_routes.js"></script>​
+</body>
+</html>

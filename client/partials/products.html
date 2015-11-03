@@ -1,0 +1,93 @@
+<style>
+	*{
+		/*outline: dotted blue 1px;*/
+	}
+
+	img{
+		height: 150px;
+		width: 150px;
+	}
+
+	p{
+		margin-top: 10px;
+	}
+
+	label{
+		margin-top: 20px;
+		margin-bottom: -10px;
+	}
+
+	#descriptionBox{
+		min-height: 100px;
+	}
+
+	#qtyBox{
+		width: 162px;
+	}
+
+	button{
+		margin-top: 15px;
+		margin-left: 50px;
+	}
+</style>
+
+<div class="container-fluid" ng-controller="ProductController as productCtrl">
+	<div class="col-sm-2">
+		<div class="row">
+			<div class="col-xs-12">
+				<input class="searchBar" type="text" ng-model="filter_name" placeholder=" search...">
+				<input type="button" value="Filter">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<label>Add new product</label>
+				<p>Name:</p>
+				<input type="text" ng-model="productCtrl.new_product.product" placeholder=" name...">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p>Image (url)</p>
+				<input type="text" ng-model="productCtrl.new_product.imageURL" placeholder=" http://">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p>Description</p>
+				<input id="descriptionBox" ng-model="productCtrl.new_product.description" type="text">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p>Initial Quantity</p>
+				<select id="qtyBox" ng-model="productCtrl.new_product.qty">
+					<option ng-value="1">1</option>
+					<option ng-value="2">2</option>
+					<option ng-value="3">3</option>
+					<option ng-value="4">4</option>
+					<option ng-value="5">5</option>
+					<option ng-value="6">6</option>
+					<option ng-value="7">7</option>
+					<option ng-value="8">8</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<button class="btn btn-primary" ng-click="productCtrl.addProduct(productCtrl.new_product)">Create Order</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-10">
+		<div class="row">
+
+			<div class="shoeRow col-sm-2" ng-repeat="product in productCtrl.products">
+				<img src="{{ product.imageURL }}">
+				<p class="text-center">{{ product.product }}</p>
+				<p class="text-center">{{ product.qty }} left</p>
+			</div>
+			
+		</div>
+	</div>
+</div>

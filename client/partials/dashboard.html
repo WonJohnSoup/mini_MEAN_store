@@ -1,0 +1,56 @@
+<style>
+div.orders_box p{
+	margin-left: 20px;
+}
+	div.orders_box a{
+		float: right;
+	}
+
+div.customers_box p{
+	margin-left: 20px;
+}
+	div.customers_box a{
+		float: right;
+	}
+
+img{
+	height: 150px;
+	width: 150px;
+}
+
+</style>
+
+
+	<div class="container-fluid" ng-controller="ProductController as productCtrl">
+		<div class="row">
+			<div class="col-sm-1">
+				<input class="searchBar" type="text" ng-model="filter_name" placeholder=" search...">
+				<input type="button" value="Filter">
+			</div>
+			<div class="col-sm-11">
+				<div class="col-sm-1"></div>
+				<div class="shoeRow col-sm-2" ng-repeat="product in productCtrl.products | limitTo: 4 | filter:filter_name">
+					<img  src="{{ product.imageURL }}">
+					<p class="text-center">{{ product.product }}</p>
+					<p class="text-center">{{ product.qty }} left</p>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="min-height: 25px;"></div>
+		<div class="row">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-7 orders_box" ng-controller="OrderController as orderCtrl">
+				<label>Recent Orders</label>
+					<p ng-repeat="order in orderCtrl.orders | limitTo: 3" >{{ order.customer }} purchased {{ order.productQty }} {{ order.productName }} </p>
+				<a href="#/orders">Show all orders...</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-7 customers_box" ng-controller="CustomerController as customerCtrl">
+				<label>Recent Orders</label>
+				<p ng-repeat="customer in customerCtrl.customers | limitTo: 3">{{ customer.customerName }} joined the store 2 days ago.</p>
+				<a href="#/customers">Show all customers...</a>
+			</div>
+		</div>
+	</div>
